@@ -25,6 +25,12 @@ var ComplexModel2 = function() {
     var word3 = uniformDraw(feature2)
     print('Konklúzió: Panni ' + word3 + '.'); 
 
+    /*
+    Ahogy a SimpleModelben is:
+    A konklúzió akkor érvényes, ha az operátor 'és'-ként van értelmezve, illetve a két állítás megegyezik. 
+    A különbség, hogy mit értelmezünk 'és'-ként és mit 'vagy'-ként.
+    Ebben az esetben az 'és' 95%-ban, a 'vagy' 80%-ban értelmezett "és"-ként.
+    */
     var ervenyes = (op == ' és ' && flip(0.95) ||  op == ' vagy ' && flip(0.80))
                     ? ((word2 == word3) ? 'érvényes' : 'nem érvényes') 
                     : 'nem érvényes'
@@ -34,4 +40,4 @@ var ComplexModel2 = function() {
 }
 
 var output = 
-  Infer({model: ComplexModel1, method:'rejection', samples: 1})
+  Infer({model: ComplexModel2, method:'rejection', samples: 1})

@@ -3,9 +3,6 @@
 hogy ha két kockával dobunk, akkor az összeg legalább 4 lesz!
 */
 
-
-// Két kocka
-
 var dobás = function () {
     var kocka1 = categorical({ps: [1/6, 1/6, 1/6, 1/6, 1/6, 1/6], 
                               vs: [1, 2, 3, 4, 5, 6]});

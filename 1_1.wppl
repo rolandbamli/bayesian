@@ -17,7 +17,7 @@ var SimpleModel = function() {
     return ervenyes
 }
 
-var dyslexiaProbability = 0.5;
+var dyslexiaProbability = 0.3;
 
 var ComplexModel1 = function() {
     var word1 = uniformDraw(feature1)
