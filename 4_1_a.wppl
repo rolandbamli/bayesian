@@ -12,7 +12,7 @@ var kartya = function () {
 };
 
 var elsoHuzasKartya = function () {
-  return [kartya()[0]]
+  return [kartya()[0]] // Ennyit változtattam csak, hogy ugyanúgy húzunk, de csak az első húzás eredményét adjuk vissza így ennek az eloszlását kapjuk meg
 }
 
 var marginalX = Infer({method: 'enumerate', model: elsoHuzasKartya});
