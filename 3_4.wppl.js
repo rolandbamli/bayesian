@@ -39,7 +39,7 @@ var vosSavantProblemSimulation = function() {
   /*
   A besúgó stratégia. A besúgó egy olyan személy, aki 50% eséllyel mondja meg nekünk, hogy melyik ajtó mögött van az autó.
   Ha mindig hallgatunk rá, akkor a nyerési eseélyünk attól függ, hogy jó információt kapunk-e tőle. 
-  Mivel, ha tudjuk hogy hol van az autó, biztosan el tudjuk dönteni, hogy maradni vagy váltani érdemesm, így biztosan nyerünk.
+  Mivel, ha tudjuk hogy hol van az autó, biztosan el tudjuk dönteni, hogy maradni vagy váltani érdemes, így biztosan nyerünk.
   Tehát szerintem, ha 50% eséllyel jó információt kapunk, akkor a nyerési esélyünk is 50%.
   */
 
@@ -51,13 +51,13 @@ var vosSavantProblemSimulation = function() {
   /*  
   Volt meg 2 extra ötletem, ahogy még bonyolítani lehetne ezt.
 
-  Az első a bátorság stratégia. Itt a besúgó, mindig igazat mond, de a jatekos bátorságától függ, hogy el meri-e fogadni a tanácsát abban az esetben. ha váltania kellene.
+  Az első a bátorság stratégia. Itt a besúgó, mindig igazat mond, de a jatekos bátorságától függ, hogy el meri-e fogadni a tanácsát abban az esetben, ha váltania kellene.
   */
   var besugoTipp = autoHely; // A besúgó biztosan tudja az autó helyét.
   var batorsag = 0.7; // A jatekos batorsága. Annak a valószíűsége, hogy a játekos vált, ha a besúgó azt mondja, hogy váltson.
 
   // Ha maradnunk kellene akkor teljesen megbízunk a besúgóban, aki mindig igazat is mond, igy biztos nyerünk.
-  // Ha váltanunk kellene akkor csak akkora eséllyel bízunk benne, mint amennyire bátrak vagyunk. A besubesúgógo mindig igazat mond, tehát ha hallgatunk rá, nyerünk.
+  // Ha váltanunk kellene akkor csak akkora eséllyel bízunk benne, mint amennyire bátrak vagyunk. A besúgó mindig igazat mond, tehát ha hallgatunk rá, nyerünk.
   var batorsagStrategia = (besugoTipp == jatekosEredetiTipp) ? true : flip(batorsag);
   
   /*
