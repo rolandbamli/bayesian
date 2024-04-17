@@ -7,7 +7,7 @@ hogy Monty megmutatot egy kecskét? A választ támasszuk alá webppl programmal
 */
 
 // A Vos Savant / Monty Hall probléma szimulálása
-// Kicsit refactoráltam a kódot, így nekem kicsit könnyebb átlátni.
+// Kicsit refactoráltam a kódot, így nekem kicsit könnyebb átlátni. Nyer es veszít helyett is true es false lett a visszatérési érték, hogy átlátahatóbb legyen ennyi esetnél.
 
 var vosSavantProblemSimulation = function() {
   // Autó helyének véletlenszerű kiválasztása (3 ajtó közül)
@@ -33,8 +33,8 @@ var vosSavantProblemSimulation = function() {
   var ValtasTipp = ujTipp(jatekosEredetiTipp, montyNyit);
 
   // Ellenőrizze, hogy a játékos nyert-e különnöző stratégiákkal
-  var strategiaMaradas = (autoHely == jatekosEredetiTipp) ? 'nyer' : 'veszít';
-  var strategiaValtas = (autoHely == ValtasTipp) ? 'nyer' : 'veszít';
+  var strategiaMaradas = (autoHely == jatekosEredetiTipp);
+  var strategiaValtas = (autoHely == ValtasTipp);
 
   /*
   A besúgó stratégia. A besúgó egy olyan személy, aki 50% eséllyel mondja meg nekünk, hogy melyik ajtó mögött van az autó.
@@ -43,13 +43,49 @@ var vosSavantProblemSimulation = function() {
   Tehát szerintem, ha 50% eséllyel jó információt kapunk, akkor a nyerési esélyünk is 50%.
   */
 
-  var besugoTippjenekMegbizhatosaga = 0.5;
-  var strategiaBesugo = (flip(besugoTippjenekMegbizhatosaga)) ? 'nyer' : 'veszít';
+  var hazudosBesugoMegbizhatosag = 0.5;
+  var strategiaBesugo = flip(hazudosBesugoMegbizhatosag);
+
+
+
+  /*  
+  Volt meg 2 extra ötletem, ahogy még bonyolítani lehetne ezt.
+
+  Az első a bátorság stratégia. Itt a besúgó, mindig igazat mond, de a jatekos bátorságától függ, hogy el meri-e fogadni a tanácsát abban az esetben. ha váltania kellene.
+  */
+  var besugoTipp = autoHely; // A besúgó biztosan tudja az autó helyét.
+  var batorsag = 0.7; // A jatekos batorsága. Annak a valószíűsége, hogy a játekos vált, ha a besúgó azt mondja, hogy váltson.
+
+  // Ha maradnunk kellene akkor teljesen megbízunk a besúgóban, aki mindig igazat is mond, igy biztos nyerünk.
+  // Ha váltanunk kellene akkor csak akkora eséllyel bízunk benne, mint amennyire bátrak vagyunk. A besubesúgógo mindig igazat mond, tehát ha hallgatunk rá, nyerünk.
+  var batorsagStrategia = (besugoTipp == jatekosEredetiTipp) ? true : flip(batorsag);
+  
+  /*
+  A másik extra ötletem a következö:
+
+  Hazudós bátorság stratégia.
+  Most is bátorságunktól függ, hogy hallgatunk-e a besúgóra, ha váltani kell, de most a besúgó bizonyos eséllyel hazudni fog.
+
+  Van egy-egy új megbízhatósági, illetve bátorsági valószínüségünk, hogy ne kavarja össze az eredeti feladatot.
+  A besúgó tippje: Ha a besúgó igazat mond, akkor az autó helyét mondja, ha hazudik akkor az ajtót, amelyik mögött nincs autó és még nincs kinyitva. Tehát vagy azt amit választottunk, vagy amire válthatunk.
+  */
+  var hazudosBesugoMegbizhatosag = 0.5;
+  var hazudosBesugoBatorsag = 0.7;
+  var hazudosBesugoTipp = flip(hazudosBesugoMegbizhatosag) ? autoHely : _.without([0, 1, 2], autoHely, montyNyit)[0]; 
+
+  var hazudosBatorsagStrategia = (hazudosBesugoTipp == jatekosEredetiTipp)                                      // megnézzük, hogy váltanunk vagy maradnunk kellene-e
+                                ? (jatekosEredetiTipp == autoHely)                                              // ha maradnunk kellene a besúgó szerint, akkor biztos hogy maradunk. Ha az eredeti tippunk helyes, akkor nyerunk, ha nem akkor vesztünk
+                                : flip(hazudosBesugoBatorsag) ? (ValtasTipp == autoHely) : jatekosEredetiTipp == autoHely;   // ha váltanunk kellene, akkor attól függően. hogy éppen mennyire vagyunk bátrak, váltunk vagy maradunk. 
+                                                                                                                // Ha váltunk és az új tippünk helyes, vagy nem váltunk, de a régi tippünk helyes, akkor nyerunk. Ellenkező esetben vesztunk.
 
   return  {
     strategiaMaradas: strategiaMaradas, 
     strategiaValtas: strategiaValtas,
-    strategiaBesugo: strategiaBesugo
+    strategiaBesugo: strategiaBesugo, // Van egy besúgónk, aki 50% eséllyel mond igazat. Mindig hallgatunk rá. Tehát 50% eséllyel nyerünk.
+
+    // Az extra stratégiák
+    batorsagStrategia: batorsagStrategia, // Van egy bátor játékosunk, aki 70% eséllyel hallgat a besúgóra, ha váltania kell. Ha nem kell váltania, akkor mindig hallgat a besúgóra. A besugó mindig igazat mond.
+    hazudosBatorsagStrategia: hazudosBatorsagStrategia // Van egy hazudós besúgónk, aki 50% eséllyel hazudik. A játékos 70% eséllyel hallgat rá, ha váltania kell. Ha nem kell váltania, akkor mindig hallgat a besúgóra. 
   } 
 
 };
